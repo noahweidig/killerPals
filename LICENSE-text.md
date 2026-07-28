@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2026
-    COPYRIGHT HOLDER: killerPals authors
+    COPYRIGHT HOLDER: Noah C. Weidig
