@@ -1,0 +1,37 @@
+Package: killerPals
+Title: Colourblind-Friendly Colour Palettes Inspired by Queen Album Covers
+Version: 0.1.0
+Authors@R:
+    person("Noah", "Weidig", email = "weidignc@gmail.com", role = c("aut", "cre"))
+Description: Forty-eight colour palettes derived from the fifteen Queen studio
+    album covers, with qualitative, sequential and diverging variants for every
+    album. Palettes are optimised so that their worst-case pairwise CIEDE2000
+    separation stays high under simulated deuteranopic, protanopic and
+    tritanopic vision, and so that every colour clears a minimum contrast ratio
+    against light and dark backgrounds. Sequential and diverging palettes are
+    strictly monotone in lightness, so they survive greyscale printing.
+    Includes 'ggplot2' scales for discrete, continuous and binned aesthetics,
+    plus tools to simulate colour vision deficiency and audit any palette's
+    accessibility.
+License: MIT + file LICENSE
+URL: https://noahweidig.github.io/killerpals/, https://github.com/noahweidig/killerpals
+BugReports: https://github.com/noahweidig/killerpals/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    ggplot2 (>= 3.5.0),
+    grDevices,
+    graphics,
+    scales (>= 1.3.0),
+    utils
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    vdiffr
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+LazyData: true
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.0.0

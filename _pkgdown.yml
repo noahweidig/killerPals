@@ -1,0 +1,71 @@
+url: https://noahweidig.github.io/killerpals/
+
+template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    # Stage-dark chrome with a gilt accent, drawn from the palettes themselves.
+    base_font: {google: "Inter"}
+    heading_font: {google: "Inter"}
+    code_font: {google: "JetBrains Mono"}
+    primary: "#7A2E8E"
+    link-color: "#8A257C"
+
+home:
+  title: Colourblind-friendly Queen album palettes for R
+  description: >
+    48 colour palettes derived from the fifteen Queen studio album covers, with
+    qualitative, sequential and diverging variants, ggplot2 scales, and tools to
+    audit their accessibility.
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github, lightswitch]
+
+reference:
+  - title: Palettes
+    desc: Get colours out of the package.
+    contents:
+      - killer_pal
+      - killer_pal_fun
+      - killer_names
+      - killer_palette_info
+      - killer_palettes
+
+  - title: ggplot2 scales
+    desc: >
+      Discrete (`_d`), continuous (`_c`) and binned (`_b`) scales, for the
+      `colour` and `fill` aesthetics.
+    contents:
+      - scale_killer
+
+  - title: Accessibility
+    desc: >
+      Verify the colourblind- and contrast-friendly claims, on these palettes or
+      on any colours at all.
+    contents:
+      - killer_check
+      - killer_cvd
+      - killer_cvd_grid
+      - killer_distance
+      - killer_distance_matrix
+      - killer_contrast
+      - killer_luminance
+
+  - title: Display
+    contents:
+      - plot.killer_palette
+
+articles:
+  - title: Get started
+    navbar: ~
+    contents:
+      - killerPals
+
+figures:
+  dev: grDevices::png
+  dpi: 150
+  fig.width: 7.5
+  fig.retina: 2
+  bg: "transparent"

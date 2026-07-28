@@ -1,0 +1,17 @@
+^data-raw$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^README\.Rmd$
+^Makefile$
+^\.lintr$
+^codecov\.yml$
+^cran-comments\.md$
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
+^LICENSE\.md$
+^\.venv$
+^assets$
+^killerPals\.Rproj$
+^\.Rproj\.user$

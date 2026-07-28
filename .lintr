@@ -1,0 +1,19 @@
+linters: linters_with_defaults(
+    line_length_linter(90),
+    # The CIEDE2000 implementation deliberately uses the variable names from the
+    # published formula (L1, C1p, Sh, Rt, ...), and the ggplot2 scale API
+    # requires dotted argument names such as `na.value`. Neither fits a single
+    # naming style, and renaming either would make the code harder to check
+    # against its reference.
+    object_name_linter = NULL,
+    # `killer_palettes` is lazy-loaded package data, which lintr's static
+    # analysis cannot see. R CMD check covers this case via the
+    # `utils::globalVariables()` declaration in R/zzz.R.
+    object_usage_linter = NULL,
+    commented_code_linter = NULL
+  )
+exclusions: list(
+    "tests/testthat.R",
+    "data-raw"
+  )
+encoding: "UTF-8"

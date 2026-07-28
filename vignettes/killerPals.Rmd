@@ -1,0 +1,228 @@
+---
+title: "Getting started with killerPals"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with killerPals}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4,
+  dpi = 120
+)
+```
+
+```{r libs}
+library(killerPals)
+library(ggplot2)
+```
+
+killerPals ships 48 palettes: a qualitative, a sequential and a diverging
+palette for each of Queen's fifteen studio albums, plus a `greatest_hits` family
+drawn from the whole catalogue.
+
+```{r names}
+killer_names()
+```
+
+## Picking a palette type
+
+The single most common mistake in colour choice is using the wrong *type* of
+palette for the data. killerPals makes the three types explicit:
+
+| Your variable | Palette type | Scale |
+|---|---|---|
+| Unordered categories (species, country, treatment) | `qualitative` | `scale_*_killer_d()` |
+| Ordered, low to high (count, density, temperature) | `sequential` | `scale_*_killer_c()` |
+| Spread either side of a meaningful zero (change, residual, anomaly) | `diverging` | `scale_*_killer_c(type = "diverging")` |
+
+### Qualitative
+
+```{r qual}
+ggplot(mpg, aes(class, fill = class)) +
+  geom_bar() +
+  scale_fill_killer_d("all_that_jazz") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Qualitative palettes deliberately refuse to invent extra colours. Asking for
+more than the palette defines is an error, not a silent interpolation, because
+interpolating between colourblind-safe colours produces colours that are not:
+
+```{r qual-limit, error = TRUE}
+killer_pal("flash", n = 12)
+```
+
+If you genuinely have a dozen categories, use `greatest_hits` — the largest
+qualitative palette — or reconsider whether twelve colours will communicate
+anything at all.
+
+```{r qual-n}
+length(killer_pal("greatest_hits"))
+```
+
+### Sequential
+
+```{r seq}
+ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
+  geom_raster() +
+  scale_fill_killer_c("heavenly") +
+  theme_minimal()
+```
+
+Every sequential ramp is strictly monotone in lightness, which is what makes it
+readable in greyscale and for readers with any kind of colour vision:
+
+```{r seq-mono}
+killer_check("heavenly", n = 9, type = "sequential")$monotone_lightness
+```
+
+### Diverging
+
+A diverging palette says "this value is above or below a reference point". That
+only works if the palette's light midpoint actually sits at that reference
+point, so **set symmetric `limits`**:
+
+```{r div}
+set.seed(1975)
+d <- expand.grid(x = 1:24, y = 1:24)
+d$z <- as.vector(scale(outer(1:24, 1:24, function(a, b) sin(a / 4) * cos(b / 5))))
+
+ggplot(d, aes(x, y, fill = z)) +
+  geom_raster() +
+  scale_fill_killer_c("kind_of_magic", type = "diverging",
+                      limits = c(-2.5, 2.5)) +
+  theme_minimal()
+```
+
+Leave the limits off and killerPals will remind you, because the default range
+is whatever your data happens to span — which will silently put the midpoint
+somewhere meaningless:
+
+```{r div-warn}
+p <- ggplot(d, aes(x, y, fill = z)) +
+  geom_raster() +
+  scale_fill_killer_c("kind_of_magic", type = "diverging")
+```
+
+### Binned
+
+Binned scales cut a continuous variable into discrete steps, which often reads
+more clearly than a smooth gradient:
+
+```{r binned}
+ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
+  geom_raster() +
+  scale_fill_killer_b("robot_news", n.breaks = 6) +
+  theme_minimal()
+```
+
+## Using colours outside ggplot2
+
+`killer_pal()` returns plain hex strings, so the palettes work anywhere.
+
+```{r base}
+pal <- killer_pal("hot_space", n = 4)
+pal
+
+barplot(1:4, col = pal, border = NA, names.arg = LETTERS[1:4])
+```
+
+Sequential and diverging palettes interpolate through CIELAB to any length you
+ask for:
+
+```{r interp}
+killer_pal("miracle", n = 3, type = "sequential")
+killer_pal("miracle", n = 11, type = "sequential")
+```
+
+For code that needs a palette *function* — the shape ggplot2 and scales expect —
+use `killer_pal_fun()`:
+
+```{r palfun}
+f <- killer_pal_fun("innuendo", type = "diverging")
+f(5)
+```
+
+## Auditing accessibility
+
+The package's central claim is that these palettes stay legible for colourblind
+readers. `killer_check()` lets you verify that rather than trust it.
+
+```{r check}
+killer_check("greatest_hits")
+```
+
+`min_distance` is the smallest [CIEDE2000](https://doi.org/10.1002/col.20070)
+difference between *any two* colours in the palette, recomputed after simulating
+each kind of colour vision deficiency. As a rule of thumb, a difference of 1 is
+the smallest a person can detect at all, and 10 is comfortably distinguishable
+at a glance.
+
+To see it rather than read it:
+
+```{r cvd-grid, fig.height = 3}
+killer_cvd_grid("greatest_hits")
+```
+
+Compare that with a palette built without any of this in mind:
+
+```{r rainbow, fig.height = 2.4}
+rb <- grDevices::rainbow(8)
+op <- par(mar = c(0.5, 5.5, 1.5, 0.5))
+plot(c(0, 8), c(0, 2), type = "n", axes = FALSE, xlab = "", ylab = "",
+     main = "rainbow(8)")
+rect(0:7, 1.1, 1:8, 1.9, col = rb, border = NA)
+rect(0:7, 0.1, 1:8, 0.9, col = killer_cvd(rb, "deutan"), border = NA)
+text(c(-0.2, -0.2), c(1.5, 0.5), c("normal", "deutan"), adj = 1, xpd = NA)
+par(op)
+
+min(killer_check(colours = rb)$min_distance)
+```
+
+Two of those eight colours are essentially identical to a deuteranopic reader.
+Every killerPals qualitative palette keeps its worst pair above 10, and the
+per-album palettes above 15:
+
+```{r all-checks}
+worst <- vapply(killer_names(), function(nm) {
+  min(killer_check(nm)$min_distance)
+}, numeric(1))
+round(sort(worst), 1)
+```
+
+## The individual metrics
+
+The building blocks are exported too, and work on any colours:
+
+```{r metrics}
+# Perceptual difference
+killer_distance("#FF0000", "#FF3300")
+
+# WCAG contrast ratio, and relative luminance
+killer_contrast("#FF524F", "white")
+killer_luminance(c("white", "grey50", "black"))
+
+# Which pair in a palette is the weakest link?
+m <- killer_distance_matrix(killer_pal("flash"), cvd = "deutan")
+round(min(m, na.rm = TRUE), 1)
+```
+
+## Choosing between palettes
+
+`killer_palette_info()` gives a tidy overview, including each palette's blurb:
+
+```{r info}
+info <- killer_palette_info(type = "qualitative")
+info[order(-info$n), c("name", "album", "year", "n")][1:5, ]
+```
+
+```{r blurbs}
+cat(paste0(format(info$name, width = 15), info$blurb), sep = "\n")
+```

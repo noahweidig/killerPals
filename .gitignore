@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+docs/
+*.tar.gz
+*.Rcheck/
+__pycache__/
+.venv/
+# Album covers are downloaded for local palette derivation only and are not
+# redistributed; `make covers` fetches them.
+data-raw/covers/
