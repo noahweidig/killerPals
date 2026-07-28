@@ -1,0 +1,8 @@
+# Pinned so the palette derivation stays reproducible. The greedy selection in
+# build_palettes.py makes discrete choices between near-equally-separable
+# colours, so a change in how k-means breaks ties can shift a palette even
+# though nothing about the method changed. Bump these deliberately, re-run
+# `make palettes`, and commit the regenerated palettes with the bump.
+numpy==2.4.6
+scikit-learn==1.9.0
+pillow==12.3.0

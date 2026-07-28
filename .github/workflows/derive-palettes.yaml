@@ -1,0 +1,55 @@
+# Verifies that the palette derivation is reproducible: re-runs it from the
+# covers and fails if the committed palette data would change.
+#
+# Runs on demand and on changes to the derivation code. It re-downloads the
+# album covers, which are not stored in the repository.
+on:
+  pull_request:
+    paths:
+      - 'data-raw/**'
+      - '.github/workflows/derive-palettes.yaml'
+  workflow_dispatch:
+
+name: derive-palettes
+
+permissions: read-all
+
+jobs:
+  derive:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # build_palettes.py sets these itself; setting them here too makes the
+      # single-threaded requirement visible to anyone reading the workflow.
+      OMP_NUM_THREADS: 1
+      OPENBLAS_NUM_THREADS: 1
+      MKL_NUM_THREADS: 1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: pip install -r data-raw/requirements.txt
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Download covers
+        run: python3 data-raw/download_covers.py
+
+      - name: Re-derive palettes
+        run: python3 data-raw/build_palettes.py
+
+      - name: Check the derivation is reproducible
+        run: |
+          if ! git diff --exit-code -- data-raw/palettes-generated.R; then
+            echo "::error::Re-running the derivation changed data-raw/palettes-generated.R."
+            echo "Run 'make palettes' locally and commit the result."
+            exit 1
+          fi
+          echo "Derivation reproduced the committed palettes exactly."

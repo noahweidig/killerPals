@@ -4,7 +4,15 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file, then run `make readme`. -->
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  dpi = 150
+)
+```
 
 # killerPals <img src="man/figures/logo.png" align="right" height="139" alt="killerPals hex logo: a crown built from palette colours" />
 
@@ -44,8 +52,7 @@ pak::pak("noahweidig/killerpals")
 
 ## Quick start
 
-
-``` r
+```{r quickstart, eval = FALSE}
 library(killerPals)
 library(ggplot2)
 
@@ -54,10 +61,17 @@ ggplot(mpg, aes(displ, hwy, colour = class)) +
   scale_colour_killer_d("greatest_hits")
 ```
 
-<div class="figure">
-<img src="man/figures/README-example-discrete-1.png" alt="plot of chunk example-discrete" width="100%" />
-<p class="caption">plot of chunk example-discrete</p>
-</div>
+```{r example-discrete, echo = FALSE, fig.height = 3.2, fig.width = 7}
+library(killerPals)
+library(ggplot2)
+
+ggplot(mpg, aes(displ, hwy, colour = class)) +
+  geom_point(size = 2) +
+  scale_colour_killer_d("greatest_hits") +
+  labs(title = "scale_colour_killer_d(\"greatest_hits\")",
+       x = "Displacement (l)", y = "Highway mpg", colour = NULL) +
+  theme_minimal(base_size = 11)
+```
 
 The scale suffixes follow ggplot2's own convention:
 
@@ -70,48 +84,43 @@ The scale suffixes follow ggplot2's own convention:
 …each in `scale_colour_*` and `scale_fill_*` form, with `scale_color_*`
 aliases.
 
-<div class="figure">
-<img src="man/figures/README-example-continuous-1.png" alt="plot of chunk example-continuous" width="100%" />
-<p class="caption">plot of chunk example-continuous</p>
-</div>
+```{r example-continuous, echo = FALSE, fig.height = 3, fig.width = 7}
+ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
+  geom_raster() +
+  scale_fill_killer_c("heavenly") +
+  labs(title = "scale_fill_killer_c(\"heavenly\")") +
+  theme_minimal(base_size = 11)
+```
 
 For values either side of a meaningful midpoint, ask for the diverging type and
 say where the midpoint is:
 
-<div class="figure">
-<img src="man/figures/README-example-diverging-1.png" alt="plot of chunk example-diverging" width="100%" />
-<p class="caption">plot of chunk example-diverging</p>
-</div>
+```{r example-diverging, echo = FALSE, fig.height = 3, fig.width = 7}
+set.seed(1975)
+d <- expand.grid(x = 1:20, y = 1:20)
+d$z <- as.vector(scale(outer(1:20, 1:20, function(a, b) sin(a / 3) * cos(b / 4))))
+
+ggplot(d, aes(x, y, fill = z)) +
+  geom_raster() +
+  scale_fill_killer_c("innuendo", type = "diverging",
+                      limits = c(-2.2, 2.2)) +
+  labs(title = "scale_fill_killer_c(\"innuendo\", type = \"diverging\")") +
+  theme_minimal(base_size = 11)
+```
 
 ## The palettes
 
 Palette names nod to the album they come from — `flash` for *Flash Gordon*,
 `opera_night` for *A Night at the Opera*, `robot_news` for *News of the World*.
 
-
-``` r
+```{r info}
 library(killerPals)
 
 killer_names()
-#>  [1] "regina"        "mirror_queen"  "heart_attack"  "opera_night"  
-#>  [5] "race_day"      "robot_news"    "all_that_jazz" "game_on"      
-#>  [9] "flash"         "hot_space"     "the_works"     "kind_of_magic"
-#> [13] "miracle"       "innuendo"      "heavenly"      "greatest_hits"
 ```
 
-
-``` r
+```{r info-table}
 head(killer_palette_info(type = "qualitative"), 4)
-#>           name                album year        type n
-#> 1       regina                Queen 1973 qualitative 8
-#> 3 heart_attack   Sheer Heart Attack 1974 qualitative 8
-#> 2 mirror_queen             Queen II 1974 qualitative 8
-#> 4  opera_night A Night at the Opera 1975 qualitative 8
-#>                                                             blurb
-#> 1          Smoke, spotlight and stage-purple from the 1973 debut.
-#> 3    Oiled, exhausted and lit in sickly green - the 1974 pile-up.
-#> 2 The mirrored Mick Rock portrait: side White against side Black.
-#> 4      Heraldic crest colours: cream, gilt and deep operatic red.
 ```
 
 ### Qualitative — unordered categories
@@ -128,44 +137,22 @@ head(killer_palette_info(type = "qualitative"), 4)
 
 ## Using the colours directly
 
-
-``` r
+```{r direct}
 killer_pal("flash")
-#> <killer_palette> flash (qualitative, 8 colours)
-#>   Flash Gordon (1980) - Ah-ah! Saviour of the universe: comic-strip red, gold and void.
-#>   #EDB900 #416D8C #75291A #D8D3AD #8CC5E9 #755E5D #687E11 #9A8D7B
 
 # Ramps interpolate to any length, through CIELAB
 killer_pal("heavenly", n = 5, type = "sequential")
-#> <killer_palette> heavenly (sequential, 5 colours)
-#>   Made in Heaven (1995) - Montreux at dusk: lake blue, alpine grey and the last light.
-#>   #F1F2FF #9EBEFE #0091FA #0563A3 #00385A
 
 # Reverse with direction = -1
 killer_pal("innuendo", n = 5, type = "diverging", direction = -1)
-#> <killer_palette> innuendo (diverging, 5 colours)
-#>   Innuendo (1991) - Grandville's Victorian engraving, hand-tinted and ornate.
-#>   #722CA1 #B98CD3 #EEF6F9 #54AF7C #005D33
 ```
 
 ## Checking the accessibility claims
 
 Don't trust the README — run the audit:
 
-
-``` r
+```{r check}
 killer_check("greatest_hits")
-#> <killer_check> greatest_hits (qualitative) 
-#>   colours: 11 
-#>   worst-case CIEDE2000 separation by vision type:
-#>     normal    14.6
-#>     deutan    13.3
-#>     protan    12.7
-#>     tritan    12.5
-#>   contrast vs white: 1.52 - 10.08
-#>   contrast vs black: 2.08 - 13.80
-#>   lightness (L*):    27.9 - 83.9
-#>   monotone lightness: FALSE
 ```
 
 `min_distance` is the worst-case CIEDE2000 gap between *any two* colours in the
@@ -174,8 +161,7 @@ a person can detect and 10 is comfortably distinguishable at a glance.
 
 You can see the same thing:
 
-
-``` r
+```{r cvd-plot, eval = FALSE}
 killer_cvd_grid("greatest_hits")
 ```
 
@@ -186,13 +172,10 @@ have nothing to do with this package. Here is `rainbow(8)`, the classic example
 of a palette that falls apart for red-green colourblind readers, next to a
 killerPals palette of the same size:
 
-
-``` r
+```{r check-other}
 min(killer_check(colours = grDevices::rainbow(8))$min_distance)
-#> [1] 0.9610308
 
 min(killer_check("flash")$min_distance)
-#> [1] 17.25737
 ```
 
 ## How the palettes were derived
