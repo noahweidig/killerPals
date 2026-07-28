@@ -28,9 +28,19 @@ import json
 import os
 import sys
 
-import numpy as np
-from PIL import Image
-from sklearn.cluster import KMeans
+# Pin the maths libraries to one thread *before* numpy and sklearn are imported.
+# Threaded k-means sums partial results in whatever order the chunks finish, so
+# its centres wobble by ~1e-12 between runs. That is far below anything visible,
+# but it is enough to flip a tie in the greedy selection below and change a
+# palette, so the wobble is removed at the source and then quantised away in
+# `extract_candidates()`.
+for _var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS",
+             "NUMEXPR_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"):
+    os.environ.setdefault(_var, "1")
+
+import numpy as np  # noqa: E402
+from PIL import Image  # noqa: E402
+from sklearn.cluster import KMeans  # noqa: E402
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -51,7 +61,19 @@ from colorsci import (  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 COVERS = os.path.join(HERE, "covers")
-RNG = np.random.default_rng(1975)  # A Night at the Opera
+SEED = 1975  # A Night at the Opera
+
+
+def album_rng(name: str) -> np.random.Generator:
+    """A generator seeded per album.
+
+    A single shared generator couples the albums together: change how many draws
+    one album's refinement takes and every later album gets a different random
+    stream. Seeding from the album name keeps each album's result independent of
+    the others and of the order they are processed in.
+    """
+    digest = sum((i + 1) * ord(c) for i, c in enumerate(name))
+    return np.random.default_rng(SEED + digest)
 
 # ---------------------------------------------------------------- album table
 # key, palette name, album title, year, one-line palette blurb
@@ -91,6 +113,7 @@ ALBUMS = [
 N_QUAL = 8          # colours in each qualitative palette
 N_SEQ = 7           # anchor stops in each sequential palette
 N_DIV = 11          # anchor stops in each diverging palette (odd -> true midpoint)
+N_GREAT = 11        # colours in the cross-catalogue `greatest_hits` palette
 
 # --- accessibility targets ---------------------------------------------------
 MIN_CVD_DE = 15.0   # worst-case pairwise CIEDE2000 under any simulated vision
@@ -129,14 +152,38 @@ def fit_gamut(lch: np.ndarray, tol: float = 1.2) -> np.ndarray:
 
 # ------------------------------------------------------- candidate extraction
 
+# Lab centres are rounded to this many decimals before anything depends on them.
+# 1e-6 is far finer than any perceptible colour difference and far coarser than
+# the ~1e-12 run-to-run jitter in k-means, so rounding makes the pipeline's input
+# exactly reproducible without changing a single visible colour.
+CENTRE_DECIMALS = 6
+
+
 def extract_candidates(path: str, k: int = 28) -> tuple[np.ndarray, np.ndarray]:
-    """k-means the cover in Lab. Returns (lab centres, area weights)."""
+    """k-means the cover in Lab. Returns (lab centres, area weights).
+
+    k-means is used only to *propose* centres. They are then rounded, and the
+    cluster assignment is recomputed here rather than taken from
+    `km.labels_`: a centre that shifts by 1e-12 can move a handful of the 40,000
+    pixels across a cluster boundary, which perturbs the area weights by enough
+    to change a downstream decision. Recomputing from the rounded centres, with
+    ties broken towards the lowest index, makes both outputs an exact function of
+    the rounded centres.
+    """
     im = Image.open(path).convert("RGB").resize((200, 200), Image.LANCZOS)
     rgb = np.asarray(im, dtype=float).reshape(-1, 3) / 255.0
     lab = rgb_to_lab(rgb)
+
     km = KMeans(n_clusters=k, n_init=8, random_state=42).fit(lab)
-    counts = np.bincount(km.labels_, minlength=k).astype(float)
-    return km.cluster_centers_, counts / counts.sum()
+    centres = np.round(km.cluster_centers_, CENTRE_DECIMALS)
+    # Sort the centres into a canonical order, so the labelling below cannot
+    # depend on which internal order k-means happened to return them in.
+    centres = centres[np.lexsort((centres[:, 2], centres[:, 1], centres[:, 0]))]
+
+    d2 = ((lab[:, None, :] - centres[None, :, :]) ** 2).sum(axis=-1)
+    labels = np.argmin(d2, axis=1)  # np.argmin already picks the lowest index
+    counts = np.bincount(labels, minlength=len(centres)).astype(float)
+    return centres, counts / counts.sum()
 
 
 def salience(lab: np.ndarray, weight: np.ndarray) -> np.ndarray:
@@ -188,7 +235,8 @@ def seed_qualitative(lab: np.ndarray, weight: np.ndarray, n: int) -> np.ndarray:
     return cand[chosen]
 
 
-def refine_qualitative(seed_lab: np.ndarray, max_drift: float = 26.0,
+def refine_qualitative(seed_lab: np.ndarray, rng: np.random.Generator,
+                       max_drift: float = 26.0,
                        iters: int = 4000) -> np.ndarray:
     """Nudge each swatch inside a bounded neighbourhood of its seed.
 
@@ -202,11 +250,11 @@ def refine_qualitative(seed_lab: np.ndarray, max_drift: float = 26.0,
 
     for it in range(iters):
         temp = 1.0 - it / iters
-        i = RNG.integers(n)
+        i = rng.integers(n)
         trial = cur.copy()
-        trial[i, 0] += RNG.normal(0, 7 * temp + 1.5)
-        trial[i, 1] += RNG.normal(0, 9 * temp + 2.0)
-        trial[i, 2] += RNG.normal(0, 22 * temp + 4.0)
+        trial[i, 0] += rng.normal(0, 7 * temp + 1.5)
+        trial[i, 1] += rng.normal(0, 9 * temp + 2.0)
+        trial[i, 2] += rng.normal(0, 22 * temp + 4.0)
         trial[i, 0] = np.clip(trial[i, 0], *L_RANGE)
         trial[i, 1] = np.clip(trial[i, 1], 10.0, 128.0)
         trial[i, 2] %= 360.0
@@ -435,7 +483,7 @@ def main() -> None:
         hues = distinctive_hues(hist, background)
 
         seed = seed_qualitative(lab, weight, N_QUAL)
-        qual_lab = order_qualitative(refine_qualitative(seed))
+        qual_lab = order_qualitative(refine_qualitative(seed, album_rng(name)))
         qual = [rgb_to_hex(c) for c in lab_to_rgb(qual_lab)]
 
         seq = build_sequential(lab, weight, N_SEQ, hues, ramp_hue[name])
@@ -463,17 +511,30 @@ def main() -> None:
     def pool_sep(i: int, j: int) -> float:
         return min(float(ciede2000(l[i], l[j])) for l in cvd_pool)
 
+    # A fixed size, not "keep going until separation drops below a threshold":
+    # that stopping rule sat right on a cliff, so a 1e-12 wobble in the inputs
+    # changed how many colours the palette had. The separation actually achieved
+    # is asserted below instead.
     chosen = [int(np.argmax(pool_lab[:, 1] ** 2 + pool_lab[:, 2] ** 2))]
-    while len(chosen) < 12:
+    while len(chosen) < N_GREAT:
         nxt = max(
             (i for i in range(len(pool_hex)) if i not in chosen),
             key=lambda i: min(pool_sep(i, c) for c in chosen),
         )
-        if min(pool_sep(nxt, c) for c in chosen) < 12.0:
-            break
         chosen.append(nxt)
     gh = order_qualitative(pool_lab[chosen])
     gh_hex = [rgb_to_hex(c) for c in lab_to_rgb(gh)]
+
+    # With the size fixed rather than threshold-driven, the separation it reaches
+    # has to be checked explicitly. `greatest_hits` buys its extra colours with
+    # some separation, so it is held to the documented qualitative floor of 10
+    # rather than the per-album target.
+    gh_de = cvd_min_distance(gh_hex)
+    if gh_de <= 10.0:
+        raise SystemExit(
+            f"greatest_hits worst-case CVD separation fell to {gh_de:.1f}, "
+            f"at or below the documented floor of 10. Reduce N_GREAT."
+        )
 
     gh_w = np.ones(len(pool_lab)) / len(pool_lab)
     gh_hues = distinctive_hues(hue_histogram(pool_lab, gh_w), background)

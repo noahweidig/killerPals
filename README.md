@@ -133,7 +133,7 @@ head(killer_palette_info(type = "qualitative"), 4)
 killer_pal("flash")
 #> <killer_palette> flash (qualitative, 8 colours)
 #>   Flash Gordon (1980) - Ah-ah! Saviour of the universe: comic-strip red, gold and void.
-#>   #BF6615 #008FD2 #1A456C #702F00 #FBC3D3 #BAD675 #5F6A55 #AB927E
+#>   #EDB900 #416D8C #75291A #D8D3AD #8CC5E9 #755E5D #687E11 #9A8D7B
 
 # Ramps interpolate to any length, through CIELAB
 killer_pal("heavenly", n = 5, type = "sequential")
@@ -158,13 +158,13 @@ killer_check("greatest_hits")
 #> <killer_check> greatest_hits (qualitative) 
 #>   colours: 11 
 #>   worst-case CIEDE2000 separation by vision type:
-#>     normal    13.8
-#>     deutan    12.2
-#>     protan    13.6
-#>     tritan    12.6
-#>   contrast vs white: 1.52 - 10.05
-#>   contrast vs black: 2.09 - 13.84
-#>   lightness (L*):    28.1 - 84.1
+#>     normal    14.6
+#>     deutan    13.3
+#>     protan    12.7
+#>     tritan    12.5
+#>   contrast vs white: 1.52 - 10.08
+#>   contrast vs black: 2.08 - 13.80
+#>   lightness (L*):    27.9 - 83.9
 #>   monotone lightness: FALSE
 ```
 
@@ -192,7 +192,7 @@ min(killer_check(colours = grDevices::rainbow(8))$min_distance)
 #> [1] 0.9610308
 
 min(killer_check("flash")$min_distance)
-#> [1] 17.17127
+#> [1] 17.25737
 ```
 
 ## How the palettes were derived

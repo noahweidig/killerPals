@@ -8,7 +8,7 @@ killer_palettes <- list(
     album = "Queen",
     year = 1973L,
     blurb = "Smoke, spotlight and stage-purple from the 1973 debut.",
-    qualitative = c("#FF524F", "#465CA0", "#CACDE8", "#9A656F", "#34481C", "#D9C4B9", "#7F91AD", "#69334E"),
+    qualitative = c("#660C9B", "#E0C7BA", "#957222", "#5973D9", "#C1D0FF", "#773521", "#606375", "#9292A4"),
     sequential = c("#FFEEF8", "#FFBBE6", "#FF7FDD", "#DF5BC3", "#B33EA5", "#842982", "#561B5B"),
     diverging = c("#425700", "#5C7800", "#82963C", "#A8B571", "#CED5A9", "#EEF6F9", "#E9C5E9", "#D39CD5", "#BB74BF", "#A24BA9", "#881993")
   ),
@@ -16,7 +16,7 @@ killer_palettes <- list(
     album = "Queen II",
     year = 1974L,
     blurb = "The mirrored Mick Rock portrait: side White against side Black.",
-    qualitative = c("#E4892B", "#4F3867", "#B5BAD9", "#8F8474", "#29493B", "#DFCDBF", "#737894", "#915700"),
+    qualitative = c("#BBD422", "#5B3C04", "#025058", "#D8C1DA", "#A06D13", "#5C8790", "#EF9C9C", "#706C5C"),
     sequential = c("#FFF0EC", "#FFC1B1", "#FF8E6D", "#EA6438", "#BE4917", "#8E3400", "#5C2400"),
     diverging = c("#883700", "#B15316", "#CB7948", "#E39F79", "#F5C7AE", "#F2F6F1", "#96DCE8", "#2FBFD3", "#009DB0", "#007A8A", "#005965")
   ),
@@ -24,7 +24,7 @@ killer_palettes <- list(
     album = "Sheer Heart Attack",
     year = 1974L,
     blurb = "Oiled, exhausted and lit in sickly green - the 1974 pile-up.",
-    qualitative = c("#C85416", "#1851A3", "#FFBBED", "#841412", "#A2D560", "#797084", "#5B374A", "#AB938E"),
+    qualitative = c("#D34000", "#A8C4DE", "#344E6A", "#F89F4E", "#7D2224", "#7D8170", "#A962CA", "#CCC5B3"),
     sequential = c("#FFF0E7", "#FFC2A3", "#FF8F5D", "#EA6438", "#C44225", "#982719", "#681411"),
     diverging = c("#A60011", "#C14336", "#D86F5F", "#ED998A", "#FCC3B9", "#F3F6F0", "#98DBEE", "#35BDDC", "#009BB8", "#007991", "#00586A")
   ),
@@ -32,7 +32,7 @@ killer_palettes <- list(
     album = "A Night at the Opera",
     year = 1975L,
     blurb = "Heraldic crest colours: cream, gilt and deep operatic red.",
-    qualitative = c("#9936C2", "#B8D6D8", "#195752", "#857C3F", "#DAC098", "#603905", "#658883", "#AA96DD"),
+    qualitative = c("#933EB4", "#AAB567", "#64C1FB", "#4F4104", "#405954", "#F3C7CD", "#79794C", "#728D90"),
     sequential = c("#DCF8FF", "#81DCFF", "#00BCFF", "#0096DE", "#0073C0", "#0050A2", "#212E71"),
     diverging = c("#714700", "#986300", "#B88438", "#D3A76F", "#EBCBA7", "#EEF7F5", "#D0CCF7", "#ABA8EA", "#8485DB", "#5964CB", "#1545BA")
   ),
@@ -40,7 +40,7 @@ killer_palettes <- list(
     album = "A Day at the Races",
     year = 1976L,
     blurb = "The crest again, inverted - black lacquer and silver.",
-    qualitative = c("#DCD226", "#305561", "#6CBDF6", "#B96D19", "#782700", "#B6C49B", "#6C6A59", "#A38C94"),
+    qualitative = c("#CC5B16", "#7FDBF9", "#00466E", "#7C2300", "#C3D963", "#3385AC", "#CC9F9F", "#7C6366"),
     sequential = c("#FFF2D8", "#FDC866", "#E2A32F", "#C48000", "#9E6100", "#794400", "#532B00"),
     diverging = c("#7B4100", "#A65B00", "#C27E3F", "#DCA373", "#F1C9AA", "#F0F6F2", "#A3D7F7", "#52B9E9", "#0099CC", "#00779F", "#005776")
   ),
@@ -48,7 +48,7 @@ killer_palettes <- list(
     album = "News of the World",
     year = 1977L,
     blurb = "Frank Kelly Freas's robot: pulp-magazine blues and steel.",
-    qualitative = c("#9F570A", "#84B7D4", "#30435E", "#9C867F", "#564A3D", "#70759D", "#ECC8C1", "#A8B656"),
+    qualitative = c("#E6A500", "#4C4352", "#C0CCDF", "#96712C", "#78729E", "#DAD2AB", "#763228", "#639C88"),
     sequential = c("#C3FFC8", "#8CE58D", "#63C45A", "#43A12D", "#2D7F01", "#245D00", "#1F3C00"),
     diverging = c("#305B00", "#487B06", "#729944", "#9CB877", "#C5D7AD", "#EFF6FA", "#F5C2DC", "#E597C0", "#D16BA5", "#BB3B8A", "#9E006D")
   ),
@@ -56,7 +56,7 @@ killer_palettes <- list(
     album = "Jazz",
     year = 1978L,
     blurb = "Berlin Wall stencil geometry in flat, graphic primaries.",
-    qualitative = c("#BC60ED", "#424428", "#77268F", "#FFC3A6", "#81DEFF", "#516C6A", "#7D7400", "#85A0A0"),
+    qualitative = c("#9F3D18", "#5B5B96", "#D3D4A4", "#FFABD3", "#5A384B", "#859B39", "#927F96", "#267E5E"),
     sequential = c("#FFEEF8", "#FFBCDE", "#FF84BF", "#F54D9B", "#CE2774", "#9F0950", "#6D0331"),
     diverging = c("#1545BA", "#5964CB", "#8485DB", "#ABA8EA", "#D0CCF7", "#F1F6F2", "#FCC1CD", "#EE95AA", "#DC6888", "#C73468", "#A2004A")
   ),
@@ -64,7 +64,7 @@ killer_palettes <- list(
     album = "The Game",
     year = 1980L,
     blurb = "Chrome, leather and cool monochrome with a flash of colour.",
-    qualitative = c("#D47826", "#5F9DFF", "#2C4746", "#FFBEBD", "#D6C7E7", "#7F5438", "#6A6880", "#7B9285"),
+    qualitative = c("#DE6E00", "#00BBE7", "#094952", "#862405", "#E5CBD0", "#357F8F", "#626C5D", "#97A07F"),
     sequential = c("#FFEFF0", "#FFBFC2", "#FF8B90", "#F8535E", "#CD343D", "#9C2023", "#681411"),
     diverging = c("#A60011", "#C14336", "#D86F5F", "#ED998A", "#FCC3B9", "#F2F6F1", "#A3D7F7", "#52B9E9", "#0099CC", "#00779F", "#005776")
   ),
@@ -72,7 +72,7 @@ killer_palettes <- list(
     album = "Flash Gordon",
     year = 1980L,
     blurb = "Ah-ah! Saviour of the universe: comic-strip red, gold and void.",
-    qualitative = c("#BF6615", "#008FD2", "#1A456C", "#702F00", "#FBC3D3", "#BAD675", "#5F6A55", "#AB927E"),
+    qualitative = c("#EDB900", "#416D8C", "#75291A", "#D8D3AD", "#8CC5E9", "#755E5D", "#687E11", "#9A8D7B"),
     sequential = c("#EDFBAA", "#CAD96B", "#ABB730", "#8E9400", "#747200", "#595200", "#3D3500"),
     diverging = c("#5B5000", "#7D6E00", "#9F8E33", "#BFAE6C", "#DDD0A6", "#F0F6F2", "#96DCE8", "#2FBFD3", "#009DB0", "#007A8A", "#005965")
   ),
@@ -80,7 +80,7 @@ killer_palettes <- list(
     album = "Hot Space",
     year = 1982L,
     blurb = "Four flat pop-art blocks - the most graphic cover they made.",
-    qualitative = c("#A122D2", "#CFD4C1", "#7C2206", "#48404E", "#8AD2FF", "#FEC426", "#629058", "#8B8292"),
+    qualitative = c("#D98DF2", "#772809", "#9AC66D", "#6452A9", "#918899", "#6DDFD2", "#CD396A", "#997C00"),
     sequential = c("#BCFFE4", "#00EBC9", "#00C4B9", "#009FA3", "#007B88", "#00596A", "#003A4B"),
     diverging = c("#5B5000", "#7D6E00", "#9F8E33", "#BFAE6C", "#DDD0A6", "#F0F7F3", "#9DD9F3", "#41BCE4", "#009AC1", "#007899", "#005870")
   ),
@@ -88,7 +88,7 @@ killer_palettes <- list(
     album = "The Works",
     year = 1984L,
     blurb = "George Hurrell's Hollywood monochrome, warmed by sepia light.",
-    qualitative = c("#D73D02", "#9BCFFF", "#553B46", "#C89079", "#8B8ABA", "#83241D", "#E6CCC8", "#8B6870"),
+    qualitative = c("#C5670A", "#88CDFF", "#698792", "#49421E", "#D8D586", "#BF938A", "#81366C", "#7D6A5E"),
     sequential = c("#FFF0EA", "#FFC1AF", "#FF8E74", "#F35B4B", "#CB3837", "#9D1C28", "#6B0D1B"),
     diverging = c("#005486", "#0074B4", "#0694E2", "#76B3F0", "#B3D3FB", "#F1F6F1", "#FDC2BF", "#EF9794", "#DC6B6C", "#C53C46", "#A60028")
   ),
@@ -96,7 +96,7 @@ killer_palettes <- list(
     album = "A Kind of Magic",
     year = 1986L,
     blurb = "Roger Chiasson's cartoon night sky: neon over midnight blue.",
-    qualitative = c("#823300", "#CDD1E4", "#6E7081", "#F4CA7C", "#9E791E", "#119BD4", "#294844", "#A49F88"),
+    qualitative = c("#FA8E4E", "#2C4962", "#9EB0BF", "#5F6700", "#937E76", "#5AE9BA", "#5D3835", "#5E7B9B"),
     sequential = c("#FFF1E4", "#FFC399", "#FF914C", "#E5692F", "#C1461E", "#972816", "#681411"),
     diverging = c("#A60011", "#C14336", "#D86F5F", "#ED998A", "#FCC3B9", "#F0F7F3", "#D0CCF7", "#ABA8EA", "#8485DB", "#5964CB", "#1545BA")
   ),
@@ -104,7 +104,7 @@ killer_palettes <- list(
     album = "The Miracle",
     year = 1989L,
     blurb = "Four faces morphed into one, in cold studio light.",
-    qualitative = c("#FB9B57", "#A9D4FA", "#354729", "#E2CDC1", "#5592A6", "#AB630B", "#694E66", "#757B6B"),
+    qualitative = c("#B8CF17", "#864555", "#77E0F7", "#EEC3B7", "#696700", "#3B6398", "#7E989E", "#AF7F68"),
     sequential = c("#C6FEFF", "#00E8F0", "#00C3C6", "#009F9E", "#007D79", "#005C56", "#003D37"),
     diverging = c("#505400", "#6E7300", "#919236", "#B4B26E", "#D6D2A7", "#F1F6F1", "#9BDDD3", "#4AC0B3", "#00A092", "#007D72", "#005B53")
   ),
@@ -112,7 +112,7 @@ killer_palettes <- list(
     album = "Innuendo",
     year = 1991L,
     blurb = "Grandville's Victorian engraving, hand-tinted and ornate.",
-    qualitative = c("#B820F1", "#8CDDBE", "#683324", "#2F435E", "#EDC82C", "#CFC2FF", "#638886", "#848200"),
+    qualitative = c("#7C3EE9", "#F6CA54", "#6D3100", "#39415D", "#ADDCC7", "#967C20", "#398E81", "#BDABE8"),
     sequential = c("#DCF8FF", "#00E7FF", "#00C3CA", "#00A099", "#007E6C", "#005D43", "#003E1F"),
     diverging = c("#005D33", "#008047", "#32A068", "#74BE91", "#ADDBBE", "#EFF6FA", "#E1C7EF", "#C7A0DD", "#AC79CA", "#8F54B7", "#722CA2")
   ),
@@ -120,7 +120,7 @@ killer_palettes <- list(
     album = "Made in Heaven",
     year = 1995L,
     blurb = "Montreux at dusk: lake blue, alpine grey and the last light.",
-    qualitative = c("#8CBA23", "#7D328C", "#998899", "#EDB6B1", "#4D4D00", "#6691F9", "#566F5D", "#D1C6EA"),
+    qualitative = c("#FFBA77", "#4D3A72", "#5F9EE3", "#9F9283", "#244D3C", "#BBD6DD", "#906722", "#667686"),
     sequential = c("#F1F3FF", "#BFCFFF", "#7AAFFF", "#0091FB", "#0073C0", "#00548A", "#00385B"),
     diverging = c("#664C00", "#8B6900", "#AC8934", "#CAAA6C", "#E4CEA6", "#EFF7F4", "#B3D3FB", "#76B3F0", "#0694E2", "#0074B4", "#005486")
   ),
@@ -128,8 +128,8 @@ killer_palettes <- list(
     album = "Greatest Hits",
     year = 1981L,
     blurb = "The most separable colours from all fifteen studio covers.",
-    qualitative = c("#B820F1", "#8CBA23", "#29493B", "#FFBBED", "#8B8292", "#782700", "#4F3867", "#CFD4C1", "#566F5D", "#915700", "#C89079"),
-    sequential = c("#F4F2FF", "#D3CAFF", "#B5A0FF", "#9B79F4", "#8257C8", "#673A97", "#492264"),
-    diverging = c("#005E00", "#2E7E1D", "#619C4E", "#8FBA7E", "#BDD8B2", "#EEF6F9", "#E1C7EF", "#C7A0DD", "#AC79CA", "#8F54B7", "#722CA2")
+    qualitative = c("#7C3EE9", "#5AE9BA", "#7C2300", "#094952", "#BBD6DD", "#DE6E00", "#660C9B", "#BDABE8", "#398E81", "#5D3835", "#F6CA54"),
+    sequential = c("#E1F7FF", "#53E2FF", "#00C1D4", "#009FA3", "#007D76", "#005D4D", "#003E2A"),
+    diverging = c("#005D41", "#007F5A", "#00A176", "#66BF9C", "#A6DCC5", "#EFF6FA", "#E1C7EF", "#C7A0DD", "#AC79CA", "#8F54B7", "#722CA2")
   )
 )
